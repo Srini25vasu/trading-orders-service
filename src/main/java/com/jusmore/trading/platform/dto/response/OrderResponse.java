@@ -1,5 +1,8 @@
 package com.jusmore.trading.platform.dto.response;
 
+import lombok.Builder;
+
+@Builder
 public record OrderResponse(
       Long id,
       String symbol,
@@ -7,4 +10,5 @@ public record OrderResponse(
       double price,
       String side
 ) {
+
 }
