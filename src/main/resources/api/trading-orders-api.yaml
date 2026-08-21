@@ -1,0 +1,70 @@
+# trading-orders api
+openapi: 3.0.0
+info:
+  title: Trading Orders API
+  version: 1.0.0
+  description: API for trading orders
+  contact:
+    name: Trading Orders API
+    email: trading-orders-api@example.com
+
+tags:
+  - name: Trading Orders
+    description: API for trading orders
+servers:
+  - url: http://localhost:8080
+
+security:
+  - openIdConnect: []
+
+components:
+  CreateOrderPayload:
+    type: object
+    properties:
+      symbol:
+        type: string
+        description: The trading symbol (e.g., BTCUSD)
+      quantity:
+        type: number
+        format: float
+        description: The quantity to trade
+      price:
+        type: number
+        format: float
+        description: The price at which to place the order
+      side:
+        type: string
+        enum: [buy, sell]
+        description: The side of the order (buy or sell)
+    required:
+      - symbol
+      - quantity
+      - price
+      - side:
+
+  securitySchemes:
+    openIdConnect:
+      type: openIdConnect
+      description: OpenID Connect authentication
+      openIdConnectUrl: https://your-oidc-provider.com/realms/your-realm/.well-known/openid-configuration
+      
+    # Alternative: OAuth2 with explicit flows
+    oauth2:
+      type: oauth2
+      description: OAuth2 authentication with OpenID Connect
+      flows:
+        authorizationCode:
+          authorizationUrl: https://your-oidc-provider.com/realms/your-realm/protocol/openid-connect/auth
+          tokenUrl: https://your-oidc-provider.com/realms/your-realm/protocol/openid-connect/token
+          scopes:
+            openid: OpenID Connect scope
+            profile: User profile information
+            email: User email address
+            trading-orders:read: Read trading orders
+            trading-orders:write: Create and modify trading orders
+        clientCredentials:
+          tokenUrl: https://your-oidc-provider.com/realms/your-realm/protocol/openid-connect/token
+          scopes:
+            trading-orders:read: Read trading orders
+            trading-orders:write: Create and modify trading orders
+
