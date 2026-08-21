@@ -12,8 +12,10 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
+
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 @Configuration
 public class JwtConfig {
@@ -38,9 +40,9 @@ public class JwtConfig {
             if (realmRoles != null) {
                 Collection<GrantedAuthority> realmAuthorities = realmRoles.stream()
                     .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-                    .collect(Collectors.toList());
+                    .collect(toList());
                 authorities = Stream.concat(authorities.stream(), realmAuthorities.stream())
-                    .collect(Collectors.toList());
+                    .toList();
             }
             
             // Extract roles from resource_access (Keycloak client-specific roles)

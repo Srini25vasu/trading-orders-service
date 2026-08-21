@@ -5,9 +5,11 @@ import com.jusmore.trading.platform.dto.request.CreateOrderRequest;
 import com.jusmore.trading.platform.dto.response.OrderResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface TradingOrderMapper {
   OrderResponse toOrderResponse(TradingOrder tradingOrder);
   TradingOrder toTradingOrder(CreateOrderRequest createOrderRequest);
+  void updateTradingOrderFromRequest(CreateOrderRequest createOrderRequest, @MappingTarget TradingOrder tradingOrder);
 }
