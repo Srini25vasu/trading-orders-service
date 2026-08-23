@@ -1,0 +1,79 @@
+[
+  {
+    "id": 1,
+    "symbol": "AAPL",
+    "quantity": 10,
+    "price": 150.0,
+    "side": "BUY"
+  },
+  {
+    "id": 2,
+    "symbol": "GOOGL",
+    "quantity": 5,
+    "price": 2800.0,
+    "side": "SELL"
+  },
+  {
+    "id": 3,
+    "symbol": "MSFT",
+    "quantity": 8,
+    "price": 300.0,
+    "side": "BUY"
+  },
+  {
+    "id": 4,
+    "symbol": "TSLA",
+    "quantity": 3,
+    "price": 1200.0,
+    "side": "SELL"
+  },
+  {
+    "id": 5,
+    "symbol": "AMZN",
+    "quantity": 12,
+    "price": 3500.0,
+    "side": "BUY"
+  },
+  {
+    "id": 6,
+    "symbol": "META",
+    "quantity": 7,
+    "price": 400.0,
+    "side": "BUY"
+  },
+  {
+    "id": 7,
+    "symbol": "META",
+    "quantity": 7,
+    "price": 400.0,
+    "side": "BUY"
+  },
+  {
+    "id": 8,
+    "symbol": "META",
+    "quantity": 7,
+    "price": 400.0,
+    "side": "BUY"
+  },
+  {
+    "id": 9,
+    "symbol": "NFLX",
+    "quantity": 4,
+    "price": 500.0,
+    "side": "SELL"
+  },
+  {
+    "id": 10,
+    "symbol": "META",
+    "quantity": 7,
+    "price": 400.0,
+    "side": "BUY"
+  },
+  {
+    "id": 11,
+    "symbol": "TSLA",
+    "quantity": 3,
+    "price": 1200.0,
+    "side": "SELL"
+  }
+]

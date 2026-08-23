@@ -2,6 +2,7 @@ package com.jusmore.trading.platform.service.impl;
 
 import com.jusmore.trading.platform.domain.base.TradingOrder;
 import com.jusmore.trading.platform.dto.request.CreateOrderRequest;
+import com.jusmore.trading.platform.dto.request.UpdateOrderRequest;
 import com.jusmore.trading.platform.dto.response.OrderResponse;
 import com.jusmore.trading.platform.exception.ResourceNotFoundException;
 import com.jusmore.trading.platform.mapper.TradingOrderMapper;
@@ -38,12 +39,18 @@ public class TradingOrderServiceImpl implements TradingOrderService {
         .orElseThrow(() -> new ResourceNotFoundException("Trading order not found with id: " + id));
   }
 
+  /**
+   * https://medium.com/@AlexanderObregon/javas-optional-map-method-explained-0a19206d6704
+   * @param id
+   * @param updateOrderRequest
+   * @return
+   */
   @Override
   @Transactional
-  public OrderResponse updateOrder(Long id, CreateOrderRequest createOrderRequest) {
+  public OrderResponse updateOrder(Long id, UpdateOrderRequest updateOrderRequest) {
     return tradingOrderRepository.findById(id)
         .map(existingOrder -> {
-          tradingOrderMapper.updateTradingOrderFromRequest(createOrderRequest, existingOrder);
+          tradingOrderMapper.updateTradingOrderFromRequest(updateOrderRequest, existingOrder);
           return tradingOrderMapper.toOrderResponse(tradingOrderRepository.save(existingOrder));
         })
         .orElseThrow(() -> new ResourceNotFoundException("Trading order not found with id: " + id));
@@ -60,8 +67,6 @@ public class TradingOrderServiceImpl implements TradingOrderService {
 
   @Override
   public List<OrderResponse> getAllOrders() {
-    return tradingOrderRepository.findAll().stream()
-        .map(tradingOrderMapper::toOrderResponse)
-        .toList();
+    return tradingOrderMapper.toOrderResponseList(tradingOrderRepository.findAll());
   }
 }

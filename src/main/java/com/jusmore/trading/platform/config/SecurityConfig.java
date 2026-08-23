@@ -21,11 +21,12 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorize -> authorize
                 // Allow actuator health and info endpoints without authentication
-                .requestMatchers("/actuator/health", "/actuator/info").permitAll()
+              //  .requestMatchers("/actuator/health", "/actuator/info").permitAll()
                 // Require authentication for all other requests
-                .requestMatchers("/api/**", "/graphql").permitAll()
+              //  .requestMatchers("/api/**", "/graphql").permitAll()
                // .requestMatchers(HttpMethod.POST, "/api/**").permitAll()
-                .anyRequest().authenticated()
+              //  .anyRequest().authenticated()
+                  .anyRequest().permitAll()
             )
             .oauth2ResourceServer(oauth2 -> oauth2
                 .jwt(Customizer.withDefaults())

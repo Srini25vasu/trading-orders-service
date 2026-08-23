@@ -1,0 +1,188 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > TradingOrderServiceImpl</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.jusmore.trading.platform.service.impl</a>
+</div>
+
+<h1>Coverage Summary for Class: TradingOrderServiceImpl (com.jusmore.trading.platform.service.impl)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TradingOrderServiceImpl</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93.3%
+  </span>
+  <span class="absValue">
+    (14/15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.jusmore.trading.platform.service.impl;
+&nbsp;
+&nbsp;import com.jusmore.trading.platform.domain.base.TradingOrder;
+&nbsp;import com.jusmore.trading.platform.dto.request.CreateOrderRequest;
+&nbsp;import com.jusmore.trading.platform.dto.request.UpdateOrderRequest;
+&nbsp;import com.jusmore.trading.platform.dto.response.OrderResponse;
+&nbsp;import com.jusmore.trading.platform.exception.ResourceNotFoundException;
+&nbsp;import com.jusmore.trading.platform.mapper.TradingOrderMapper;
+&nbsp;import com.jusmore.trading.platform.repository.entities.TradingOrderRepository;
+&nbsp;import com.jusmore.trading.platform.service.TradingOrderService;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import lombok.extern.slf4j.Slf4j;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
+&nbsp;import org.springframework.validation.annotation.Validated;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;@Slf4j</b>
+&nbsp;@Validated
+&nbsp;@AllArgsConstructor
+&nbsp;public class TradingOrderServiceImpl implements TradingOrderService {
+&nbsp;  private final TradingOrderRepository tradingOrderRepository;
+&nbsp;  private final TradingOrderMapper tradingOrderMapper;
+&nbsp;
+&nbsp;  @Override
+&nbsp;  @Transactional
+&nbsp;  public OrderResponse createOrder(CreateOrderRequest createOrderRequest) {
+<b class="fc">&nbsp;    TradingOrder tradingOrder = tradingOrderRepository.save(tradingOrderMapper.toTradingOrder(createOrderRequest));</b>
+<b class="fc">&nbsp;    return tradingOrderMapper.toOrderResponse(tradingOrder);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  @Transactional(readOnly = true)
+&nbsp;  public OrderResponse getOrder(Long id) {
+<b class="fc">&nbsp;    return tradingOrderRepository.findById(id)</b>
+<b class="fc">&nbsp;        .map(tradingOrderMapper::toOrderResponse)</b>
+<b class="fc">&nbsp;        .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Trading order not found with id: &quot; + id));</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  /**
+&nbsp;   * https://medium.com/@AlexanderObregon/javas-optional-map-method-explained-0a19206d6704
+&nbsp;   * @param id
+&nbsp;   * @param updateOrderRequest
+&nbsp;   * @return
+&nbsp;   */
+&nbsp;  @Override
+&nbsp;  @Transactional
+&nbsp;  public OrderResponse updateOrder(Long id, UpdateOrderRequest updateOrderRequest) {
+<b class="fc">&nbsp;    return tradingOrderRepository.findById(id)</b>
+<b class="fc">&nbsp;        .map(existingOrder -&gt; {</b>
+<b class="fc">&nbsp;          tradingOrderMapper.updateTradingOrderFromRequest(updateOrderRequest, existingOrder);</b>
+<b class="fc">&nbsp;          return tradingOrderMapper.toOrderResponse(tradingOrderRepository.save(existingOrder));</b>
+&nbsp;        })
+<b class="fc">&nbsp;        .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Trading order not found with id: &quot; + id));</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  @Transactional
+&nbsp;  public void deleteOrder(Long id) {
+<b class="pc">&nbsp;    if (!tradingOrderRepository.existsById(id)) {</b>
+<b class="nc">&nbsp;      throw new ResourceNotFoundException(&quot;Trading order not found with id: &quot; + id);</b>
+&nbsp;    }
+<b class="fc">&nbsp;    tradingOrderRepository.deleteById(id);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Override
+&nbsp;  public List&lt;OrderResponse&gt; getAllOrders() {
+<b class="fc">&nbsp;    return tradingOrderMapper.toOrderResponseList(tradingOrderRepository.findAll());</b>
+&nbsp;  }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-08-23 16:36</div>
+</div>
+</body>
+</html>

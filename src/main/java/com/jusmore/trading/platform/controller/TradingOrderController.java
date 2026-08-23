@@ -1,6 +1,7 @@
 package com.jusmore.trading.platform.controller;
 
 import com.jusmore.trading.platform.dto.request.CreateOrderRequest;
+import com.jusmore.trading.platform.dto.request.UpdateOrderRequest;
 import com.jusmore.trading.platform.dto.response.OrderResponse;
 import com.jusmore.trading.platform.service.TradingOrderService;
 import jakarta.validation.Valid;
@@ -8,6 +9,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/orders")
 @AllArgsConstructor
+@Validated
 public class TradingOrderController {
   private final TradingOrderService tradingOrderService;
 
@@ -25,15 +28,15 @@ public class TradingOrderController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<OrderResponse> getOrder(@PathVariable Long id) {
+  public ResponseEntity<OrderResponse> getOrder(@PathVariable @Positive(message = "Order ID must be positive") Long id) {
     return ResponseEntity.ok(tradingOrderService.getOrder(id));
   }
 
   @PutMapping("/{id}")
   public ResponseEntity<OrderResponse> updateOrder(
-      @PathVariable Long id,
-      @Valid @RequestBody CreateOrderRequest createOrderRequest) {
-    return ResponseEntity.ok(tradingOrderService.updateOrder(id, createOrderRequest));
+        @PathVariable @Positive(message = "Order ID must be positive") Long id,
+        @Valid @RequestBody UpdateOrderRequest updateOrderRequest) {
+    return ResponseEntity.ok(tradingOrderService.updateOrder(id, updateOrderRequest));
   }
 
   @DeleteMapping("/{id}")
