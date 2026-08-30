@@ -6,10 +6,10 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.oauth2.jwt.Jwt;
+/*import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
-
+*/
 import java.util.Collection;
 import java.util.List;
 
@@ -20,6 +20,7 @@ import static java.util.stream.Collectors.toList;
 @Configuration
 public class JwtConfig {
 
+  /*
     @Bean
     public Converter<Jwt, AbstractAuthenticationToken> jwtAuthenticationConverter() {
         JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
@@ -63,4 +64,5 @@ public class JwtConfig {
             return authorities;
         };
     }
+*/
 }

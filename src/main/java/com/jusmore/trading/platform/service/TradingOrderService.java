@@ -3,6 +3,7 @@ package com.jusmore.trading.platform.service;
 import com.jusmore.trading.platform.dto.request.CreateOrderRequest;
 import com.jusmore.trading.platform.dto.request.UpdateOrderRequest;
 import com.jusmore.trading.platform.dto.response.OrderResponse;
+import com.jusmore.trading.platform.dto.response.TradeOrderSummary;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
@@ -14,4 +15,7 @@ public interface TradingOrderService {
   OrderResponse updateOrder(Long id, UpdateOrderRequest updateOrderRequest);
   void deleteOrder(@NotNull(message = "Order ID cannot be null") @Positive(message = "Order ID must be positive") Long id);
   List<OrderResponse> getAllOrders();
+  OrderResponse updateTradingOrder(Long id, UpdateOrderRequest updateOrderRequest );
+  List<OrderResponse> getOrders(String symbol, String side, String groupby);
+  List<TradeOrderSummary> getTradeOrderSummaries(String slide);
 }

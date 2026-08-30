@@ -4,9 +4,7 @@ import com.jusmore.trading.platform.domain.base.TradingOrder;
 import com.jusmore.trading.platform.dto.request.CreateOrderRequest;
 import com.jusmore.trading.platform.dto.request.UpdateOrderRequest;
 import com.jusmore.trading.platform.dto.response.OrderResponse;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -16,4 +14,10 @@ public interface TradingOrderMapper {
   TradingOrder toTradingOrder(CreateOrderRequest createOrderRequest);
   void updateTradingOrderFromRequest(UpdateOrderRequest updateOrderRequest, @MappingTarget TradingOrder tradingOrder);
   List<OrderResponse> toOrderResponseList(List<TradingOrder> tradingOrderList);
+  @BeanMapping(
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
+  )
+  @Mapping(target = "id", ignore = true)
+  void updateTradingOrder(UpdateOrderRequest updateOrderRequest, @MappingTarget TradingOrder tradingOrder);
 }

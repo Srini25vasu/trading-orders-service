@@ -75,6 +75,20 @@ class TradingOrderControllerTest {
         .andExpect(content().json(objectMapper.writeValueAsString(sampleOrders)));
   }
 
+  /**
+   *    // When & Then: We call the API and verify the response
+   *         mockMvc.perform(get("/api/jobs")
+   *                         .param("query", "Java")
+   *                         .contentType(MediaType.APPLICATION_JSON))
+   *                 .andExpect(status().isOk())
+   *                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+   *                 .andExpect(jsonPath("$[0].title").value("Java Developer"))
+   *                 .andExpect(jsonPath("$[1].title").value("Java Architect"))
+   *                 .andExpect(jsonPath("$").isArray())
+   *                 .andExpect(jsonPath("$.length()").value(2));
+   * @throws Exception
+   */
+
   @Test
   void testGetAllOrdersInternlError() throws Exception {
     when(tradingOrderService.getAllOrders()).thenThrow(new RuntimeException("Internal server error"));

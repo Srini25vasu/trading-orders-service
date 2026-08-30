@@ -4,6 +4,7 @@ import com.jusmore.trading.platform.domain.base.TradingOrder;
 import com.jusmore.trading.platform.dto.request.CreateOrderRequest;
 import com.jusmore.trading.platform.dto.request.UpdateOrderRequest;
 import com.jusmore.trading.platform.dto.response.OrderResponse;
+import com.jusmore.trading.platform.dto.response.TradeOrderSummary;
 import com.jusmore.trading.platform.repository.entities.TradingOrderRepository;
 import com.jusmore.trading.platform.mapper.TradingOrderMapper;
 import jakarta.validation.ConstraintViolationException;
@@ -39,6 +40,7 @@ public class TradingOrdersServiceTest {
 
   private List<TradingOrder> tradingOrders;
   private List<OrderResponse> orderResponses;
+  private List<TradeOrderSummary> tradeOrderSummaries;
 
   @BeforeEach
   void setup() throws IOException {
@@ -48,6 +50,9 @@ public class TradingOrdersServiceTest {
     orderResponses = objectMapper.readValue(getClass()
           .getResourceAsStream("/order-responses.json"), objectMapper.getTypeFactory()
           .constructCollectionType(List.class, OrderResponse.class));
+    tradeOrderSummaries = objectMapper.readValue(getClass()
+          .getResourceAsStream("/trade-order-summaries.json"), objectMapper.getTypeFactory()
+          .constructCollectionType(List.class, TradeOrderSummary.class));
   }
 
   @Test
@@ -171,5 +176,11 @@ public class TradingOrdersServiceTest {
     assertEquals("Invalid order ID", exception.getMessage());
     verify(tradingOrderRepository).findById(-1L);
     verifyNoInteractions(tradingOrderMapper);
+  }
+
+  @Test
+  void testGetTradeOrderSummaries() {
+
+
   }
 }
