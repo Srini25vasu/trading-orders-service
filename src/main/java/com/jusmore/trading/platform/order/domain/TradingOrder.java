@@ -4,6 +4,7 @@ import com.jusmore.trading.platform.common.domain.BaseEntity;
 import com.jusmore.trading.platform.customer.domain.Customer;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TradingOrder extends BaseEntity {
+public class TradingOrder extends BaseEntity<Long> {
   @Column(name = "symbol")
   private String symbol;
   @Column(name = "quantity")
@@ -24,6 +25,6 @@ public class TradingOrder extends BaseEntity {
   @Column(name = "side")
   private String side;
   @ManyToOne
-  @JoinColumn(name = "customer_id")
+  @JoinColumn(name = "customer_id", foreignKey = @ForeignKey(name = "fk_trading_order_customer"))
   private Customer customer;
 }

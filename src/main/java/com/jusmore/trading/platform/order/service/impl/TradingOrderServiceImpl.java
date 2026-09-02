@@ -1,5 +1,7 @@
 package com.jusmore.trading.platform.order.service.impl;
 
+import com.jusmore.trading.platform.customer.domain.Customer;
+import com.jusmore.trading.platform.customer.repository.CustomerRepository;
 import com.jusmore.trading.platform.order.domain.TradingOrder;
 import com.jusmore.trading.platform.order.dto.request.CreateOrderRequest;
 import com.jusmore.trading.platform.order.dto.request.UpdateOrderRequest;
@@ -9,6 +11,7 @@ import com.jusmore.trading.platform.common.exception.ResourceNotFoundException;
 import com.jusmore.trading.platform.order.mapper.TradingOrderMapper;
 import com.jusmore.trading.platform.order.repository.TradingOrderRepository;
 import com.jusmore.trading.platform.order.service.TradingOrderService;
+import com.jusmore.trading.platform.shared_kernel.CustomerId;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -20,17 +23,31 @@ import java.util.List;
 
 @Service
 @Slf4j
-@Validated
 @AllArgsConstructor
 public class TradingOrderServiceImpl implements TradingOrderService {
   private final TradingOrderRepository tradingOrderRepository;
+  private final CustomerRepository customerRepository;
   private final TradingOrderMapper tradingOrderMapper;
 
   @Override
   @Transactional
   public OrderResponse createOrder(CreateOrderRequest createOrderRequest) {
-    TradingOrder tradingOrder = tradingOrderRepository.save(tradingOrderMapper.toTradingOrder(createOrderRequest));
-    return tradingOrderMapper.toOrderResponse(tradingOrder);
+    log.info("Erstellung des Trading-Orders für Kunden mit id: {}", createOrderRequest.customerId());
+    try {
+      Customer customer = customerRepository.findById(CustomerId.create(createOrderRequest.customerId()))
+            .orElseThrow(() -> new ResourceNotFoundException("Kunde nicht gefunden mit id: " + createOrderRequest.customerId()));
+
+      TradingOrder tradingOrder = tradingOrderMapper.toTradingOrder(createOrderRequest);
+      tradingOrder.setCustomer(customer);
+      TradingOrder createdTradingOrder = tradingOrderRepository.save(tradingOrder);
+      OrderResponse orderResponse = tradingOrderMapper.toOrderResponse(createdTradingOrder);
+      log.debug("Trading-Order: {} für Kunden mit id: {} erfolgreich erstellt", orderResponse, createOrderRequest.customerId());
+      return orderResponse;
+    } catch (Exception e) {
+      log.error("Fehler beim Erstellen des Trading-Orders für Kunden mit id: {}", createOrderRequest.customerId(), e);
+      throw e;
+    }
+
   }
 
   @Override
@@ -41,22 +58,14 @@ public class TradingOrderServiceImpl implements TradingOrderService {
           .orElseThrow(() -> new ResourceNotFoundException("Trading order not found with id: " + id));
   }
 
-  /**
-   * https://medium.com/@AlexanderObregon/javas-optional-map-method-explained-0a19206d6704
-   *
-   * @param id
-   * @param updateOrderRequest
-   * @return
-   */
   @Override
   @Transactional
   public OrderResponse updateOrder(Long id, UpdateOrderRequest updateOrderRequest) {
-    return tradingOrderRepository.findById(id)
-          .map(existingOrder -> {
-            tradingOrderMapper.updateTradingOrderFromRequest(updateOrderRequest, existingOrder);
-            return tradingOrderMapper.toOrderResponse(tradingOrderRepository.save(existingOrder));
-          })
+    TradingOrder existingOrder = tradingOrderRepository.findById(id)
           .orElseThrow(() -> new ResourceNotFoundException("Trading order not found with id: " + id));
+    tradingOrderMapper.updateTradingOrderFromRequest(updateOrderRequest, existingOrder);
+    TradingOrder savedOrder = tradingOrderRepository.save(existingOrder);
+    return tradingOrderMapper.toOrderResponse(savedOrder);
   }
 
   @Override
@@ -77,13 +86,11 @@ public class TradingOrderServiceImpl implements TradingOrderService {
 
   @Override
   public OrderResponse updateTradingOrder(Long id, UpdateOrderRequest updateOrderRequest) {
-    return tradingOrderRepository.findById(id)
-          .map(existingOrder -> {
-            tradingOrderMapper.updateTradingOrder(updateOrderRequest, existingOrder);
-            return tradingOrderMapper.toOrderResponse(tradingOrderRepository.save(existingOrder));
-          })
+    TradingOrder existingOrder = tradingOrderRepository.findById(id)
           .orElseThrow(() -> new ResourceNotFoundException("Trading order with id: " + id + " not found"));
-
+    tradingOrderMapper.updateTradingOrder(updateOrderRequest, existingOrder);
+    TradingOrder savedOrder = tradingOrderRepository.save(existingOrder);
+    return tradingOrderMapper.toOrderResponse(savedOrder);
   }
 
   @Override
@@ -96,4 +103,3 @@ public class TradingOrderServiceImpl implements TradingOrderService {
     return tradingOrderRepository.findTradeOrderSummaries(slide);
   }
 }
-

@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotNull;
 
 public record CreateOrderRequest(
       @NotNull
+      String customerId,
+      @NotNull
       String symbol,
       double quantity,
       double price,

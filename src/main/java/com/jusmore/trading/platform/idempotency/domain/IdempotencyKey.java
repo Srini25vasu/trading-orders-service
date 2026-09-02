@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 )
 @Getter
 @NoArgsConstructor
-public class IdempotencyKey extends BaseEntity {
+public class IdempotencyKey extends BaseEntity<Long> {
 
   @Setter
   @Column(name = "idempotency_key", nullable = false, length = 100)

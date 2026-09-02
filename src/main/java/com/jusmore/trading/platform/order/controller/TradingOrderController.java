@@ -25,8 +25,9 @@ public class TradingOrderController {
   private final TradingOrderService tradingOrderService;
 
   @PostMapping
-  public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody CreateOrderRequest createOrderRequest) {
-    return ResponseEntity.status(HttpStatus.CREATED).body(tradingOrderService.createOrder(createOrderRequest));
+  @ResponseStatus(HttpStatus.CREATED)
+  public OrderResponse createOrder(@Valid @RequestBody CreateOrderRequest createOrderRequest) {
+    return tradingOrderService.createOrder(createOrderRequest);
   }
 
   @GetMapping("/{id}")

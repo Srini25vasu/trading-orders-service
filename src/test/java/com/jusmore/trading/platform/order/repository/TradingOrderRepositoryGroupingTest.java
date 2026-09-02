@@ -5,6 +5,7 @@ import com.jusmore.trading.platform.order.domain.TradingOrder;
 import com.jusmore.trading.platform.customer.domain.UserId;
 import com.jusmore.trading.platform.customer.repository.CustomerRepository;
 import com.jusmore.trading.platform.order.dto.response.TradeOrderSummary;
+import com.jusmore.trading.platform.shared_kernel.CustomerId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabas
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,17 +34,17 @@ public class TradingOrderRepositoryGroupingTest {
   @BeforeEach
   void setup() {
     tradingOrderRepository.deleteAll();
-    UserId userId = UserId.create();
+    CustomerId userId = CustomerId.create();
     persistCustomer(userId,"John Doe", "sss@gmail.com", "1234567890");
     testEntityManager.flush();
     testEntityManager.clear();
-    Customer customer = customerRepository.findByEmail("sss@gmail.com");
+    Optional<Customer> customer = customerRepository.findByEmail("sss@gmail.com");
 
-    persistTradingOrder("VW", 89.0, 50000.0, "UP", customer);
-    persistTradingOrder("TATA", 37.0, 50000.0, "DOWN", customer);
-    persistTradingOrder("SUZUKI", 34, 4000.0, "UP", customer);
-    persistTradingOrder("VW", 45.0, 500.0, "DOWN", customer);
-    persistTradingOrder("VW", 34.0, 737, "UP", customer);
+    persistTradingOrder("VW", 89.0, 50000.0, "UP", customer.orElseThrow(() -> new AssertionError("Customer not found")));
+    persistTradingOrder("TATA", 37.0, 50000.0, "DOWN", customer.orElseThrow(() -> new AssertionError("Customer not found")));
+    persistTradingOrder("SUZUKI", 34, 4000.0, "UP", customer.orElseThrow(() -> new AssertionError("Customer not found")));
+    persistTradingOrder("VW", 45.0, 500.0, "DOWN", customer.orElseThrow(() -> new AssertionError("Customer not found")));
+    persistTradingOrder("VW", 34.0, 737, "UP", customer.orElseThrow(() -> new AssertionError("Customer not found")));
 
     testEntityManager.flush();
     testEntityManager.clear();
@@ -66,7 +68,7 @@ public class TradingOrderRepositoryGroupingTest {
     assertEquals(168.0, vwOrderSummaries.totalQuantity());
   }
 
-  private void persistCustomer(UserId userId, String name, String email, String phone) {
+  private void persistCustomer(CustomerId userId, String name, String email, String phone) {
     Customer customer = new Customer();
     customer.setId(userId);
     customer.setName(name);

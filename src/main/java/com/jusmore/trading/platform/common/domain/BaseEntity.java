@@ -13,17 +13,17 @@ import java.util.Objects;
 @Getter
 @Setter
 @MappedSuperclass
-public abstract class BaseEntity implements Serializable {
+public abstract class BaseEntity<T> implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private T id;
 
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    BaseEntity that = (BaseEntity) o;
+    BaseEntity<?> that = (BaseEntity<?>) o;
     return id != null && Objects.equals(id, that.id);
   }
 
