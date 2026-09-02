@@ -1,6 +1,6 @@
 package com.jusmore.trading.platform;
 
-import com.jusmore.trading.platform.config.TestSecurityConfig;
+import com.jusmore.trading.platform.common.config.TestSecurityConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -16,3 +16,4 @@ class TradingOrdersServiceApplicationTests {
 	}
 
 }
+

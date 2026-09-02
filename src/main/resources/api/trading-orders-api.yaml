@@ -12,11 +12,68 @@ info:
 tags:
   - name: Trading Orders
     description: API for trading orders
+  - name: Customers
+    description: API for customers
 servers:
   - url: http://localhost:8080
 
 security:
   - openIdConnect: []
+
+paths:
+  /api/v1/orders:
+    post:
+      operationId: createOrder
+      summary: create a Trading Order
+      tags:
+        - Trading Orders
+      security:
+        - openIdConnect: []
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            format: jwt
+          description: Bearer token
+        - in: header
+          name: X-Idempotency-Key
+          required: true
+          schema:
+            type: string
+          description: Idempotency key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/CreateOrderPayload'
+      responses:
+        '200':
+          description: Order created successfully
+          headers:
+            X-Idempotency-Key:
+              description: The idempotency key that was provided in the request
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/OrderResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/ErrorResponse'
+
+
+
+
+
+
+
 
 components:
   CreateOrderPayload:
@@ -60,7 +117,24 @@ components:
       - quantity
       - price
       - side
-
+  OrderResponse:
+    properties:
+      quantity:
+        type: number
+        format: float
+        description: The quantity to trade
+      price:
+        type: number
+        format: float
+        description: The price at which to place the order
+      side:
+        type: string
+        enum: [UP, DOWN]
+        description: The side of the order (buy or sell)
+    required:
+      - quantity
+      - price
+      - side
 
   securitySchemes:
     openIdConnect:

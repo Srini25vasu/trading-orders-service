@@ -10,3 +10,5 @@ https://medium.com/@reshmivijayan97/javas-sealed-classes-enhancing-code-safety-a
 https://www.trinitylogic.co.uk/blog/java-state-machines-records-sealed-interfaces/
 
 https://medium.com/javarevisited/one-endpoint-multiple-payloads-handling-polymorphic-request-bodies-in-spring-boot-4e354b72450c
+
+https://medium.com/@pricillarubysanthiyagu/jpa-entity-relationship-mapping-in-spring-boot-9e6476a0196d
