@@ -12,6 +12,11 @@ import java.util.List;
 public interface TradingOrderMapper {
   OrderResponse toOrderResponse(TradingOrder tradingOrder);
   TradingOrder toTradingOrder(CreateOrderRequest createOrderRequest);
+  @BeanMapping(
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
+  )
+  @Mapping(target = "id", ignore = true)
   void updateTradingOrderFromRequest(UpdateOrderRequest updateOrderRequest, @MappingTarget TradingOrder tradingOrder);
   List<OrderResponse> toOrderResponseList(List<TradingOrder> tradingOrderList);
   @BeanMapping(

@@ -12,3 +12,11 @@ https://www.trinitylogic.co.uk/blog/java-state-machines-records-sealed-interface
 https://medium.com/javarevisited/one-endpoint-multiple-payloads-handling-polymorphic-request-bodies-in-spring-boot-4e354b72450c
 
 https://medium.com/@pricillarubysanthiyagu/jpa-entity-relationship-mapping-in-spring-boot-9e6476a0196d
+
+ docker build -t srini:trading-order-v1 .
+
+ Auf Gitlab community bereitstellen:
+ https://gitlab.com/-/user_settings/personal_access_tokens?state=active&sort=expires_asc
+
+
+

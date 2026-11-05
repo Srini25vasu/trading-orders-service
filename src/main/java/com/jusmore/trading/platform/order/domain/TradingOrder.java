@@ -5,13 +5,21 @@ import com.jusmore.trading.platform.customer.domain.Customer;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity(name = "trading_order")
+@Table(
+    name = "trading_order",
+    indexes = {
+      @Index(name = "idx_trading_order_symbol", columnList = "symbol"),
+      @Index(name = "idx_trading_order_symbol_cov", columnList = "symbol, quantity, price, id")
+    })
 @Getter
 @Setter
 @NoArgsConstructor

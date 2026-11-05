@@ -14,6 +14,8 @@ import com.jusmore.trading.platform.shared_kernel.CustomerId;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -104,11 +106,23 @@ public class CustomerServiceImpl implements CustomerService {
   }
 
   @Override
-  public List<CustomerListResponse> getAllCustomers() {
+  public List<CustomerResponse> getAllCustomers() {
     log.info("Abrufen aller Kunden");
-    List<Customer> customers = customerRepository.findAll();
+    List<Customer> customers = customerRepository.findAllWithTradingOrders();
     return customers.stream()
-          .map(customerMapper::toCustomerListResponse)
+          .map(customerMapper::toCustomerResponse)
           .toList();
+  }
+
+  @Override
+  public Page<CustomerListResponse> getCustomersPaginated(Pageable page) {
+    log.info("Abrufen aller Kunden mit pagination für Page: {}", page.getPageNumber());
+    try {
+      return customerRepository.findAll(page)
+            .map(customerMapper::toCustomerListResponse);
+    } catch (DataAccessException e) {
+      log.error("Fehler beim Abrufen der Kunden mit pagination für Page: {}", page.getPageNumber(), e);
+      throw new ResourceCreationException("Kunden konnten aufgrund eines Datenpersistenzfehlers nicht abgerufen werden", e);
+    }
   }
 }

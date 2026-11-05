@@ -1,0 +1,39 @@
+image: docker:27
+services:
+  - docker:27-dind
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  IMAGE_NAME: "spring-boot-app:local"
+stages:
+  - test
+  - build
+  - package
+  - deploy
+
+default:
+  tags:
+    - local-laptop-minikube
+##
+## Test stage
+##
+run_tests:
+  stage: test
+  image: maven:3.9-eclipse-temurin-25 # Updated to Java 25
+  script:
+    - mvn clean test
+
+##
+## Build stage
+##
+build_jar:
+  stage: build
+  image: maven:3.9-eclipse-temurin-25 # Updated to Java 25
+  script:
+    - mvn clean package -DskipTests
+  artifacts:
+    paths:
+      - target/*.jar
+    expire_in: 1 week
+  only:
+    - main
+

@@ -7,6 +7,8 @@ import com.jusmore.trading.platform.customer.dto.response.CustomerResponse;
 import com.jusmore.trading.platform.customer.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.web.bind.annotation.*;
@@ -45,8 +47,14 @@ public class CustomerController {
 
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
-  public List<CustomerListResponse> getAllCustomers() {
+  public List<CustomerResponse> getAllCustomers() {
     return customerService.getAllCustomers();
+  }
+
+  @GetMapping("/paginated")
+  @ResponseStatus(HttpStatus.OK)
+  public Page<CustomerListResponse> getCustomersPaginated(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+    return customerService.getCustomersPaginated(PageRequest.of(page, size));
   }
 }
 

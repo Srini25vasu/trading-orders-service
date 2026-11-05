@@ -1,0 +1,20 @@
+{
+  "name": "Mahsa",
+  "email": "mahsa@example.com",
+  "phone": "1234567890",
+  "tradingOrders": [
+    {
+      "symbol": "BTC",
+      "quantity": 0.5,
+      "price": 30000.0,
+      "side": "UP"
+    },
+    {
+      "symbol": "VW",
+      "quantity": 100,
+      "price": 10.0,
+      "side": "DOWN"
+    }
+
+  ]
+}

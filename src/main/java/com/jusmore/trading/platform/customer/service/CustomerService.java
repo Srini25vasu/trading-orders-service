@@ -4,6 +4,8 @@ import com.jusmore.trading.platform.customer.dto.request.CreateCustomerRequest;
 import com.jusmore.trading.platform.customer.dto.request.UpdateCustomerRequest;
 import com.jusmore.trading.platform.customer.dto.response.CustomerListResponse;
 import com.jusmore.trading.platform.customer.dto.response.CustomerResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -21,6 +23,7 @@ public interface CustomerService {
   CustomerResponse getCustomerById(String id);
   CustomerResponse updateCustomer(String id, UpdateCustomerRequest request);
   void deleteCustomer(String id);
-  List<CustomerListResponse> getAllCustomers();
+  List<CustomerResponse> getAllCustomers();
+  Page<CustomerListResponse> getCustomersPaginated(Pageable page);
 }
 

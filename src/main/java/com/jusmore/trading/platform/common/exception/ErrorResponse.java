@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.validation.FieldError;
+
+import java.util.List;
 
 @Getter
 @Builder
@@ -15,5 +18,6 @@ public class ErrorResponse {
     private String message;
     private String timestamp;
     private String path;
+    private List<FieldError> errors;
 }
 

@@ -1,6 +1,7 @@
 package com.jusmore.trading.platform.order.controller;
 
 import com.jusmore.trading.platform.common.config.TestSecurityConfig;
+import com.jusmore.trading.platform.order.dto.request.CreateOrderRequest;
 import com.jusmore.trading.platform.order.dto.response.OrderResponse;
 import com.jusmore.trading.platform.common.exception.ErrorCode;
 import com.jusmore.trading.platform.common.exception.ErrorResponse;
@@ -13,14 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.time.LocalDate;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -68,9 +72,30 @@ class TradingOrderControllerTest {
    */
 
   @Test
+  void testCreateOrder() throws Exception {
+    CreateOrderRequest createOrderRequest = new CreateOrderRequest(
+        "CUST-001", "AAPL", 10.0, 185.5, "BUY"
+    );
+    OrderResponse orderResponse = new OrderResponse(
+        1L, "AAPL", 10.0, 185.5, "BUY", "John Doe"
+    );
+
+    when(tradingOrderService.createOrder(any(CreateOrderRequest.class))).thenReturn(orderResponse);
+
+    mockMvc.perform(post("/api/v1/orders")
+          .contentType(MediaType.APPLICATION_JSON)
+          .content(objectMapper.writeValueAsString(createOrderRequest)))
+          .andExpect(status().isCreated())
+          .andExpect(content().json(objectMapper.writeValueAsString(orderResponse)));
+  }
+
+  @Test
   void testGetAllOrders() throws Exception {
-    when(tradingOrderService.getAllOrders()).thenReturn(sampleOrders);
-    mockMvc.perform(get("/api/v1/orders"))
+    when(tradingOrderService.getOrders("AAPL", "BUY", "symbol")).thenReturn(sampleOrders);
+    mockMvc.perform(get("/api/v1/orders")
+          .param("symbol", "AAPL")
+          .param("side", "BUY")
+          .param("groupBy", "symbol"))
         .andExpect(status().isOk())
         .andExpect(content().json(objectMapper.writeValueAsString(sampleOrders)));
   }
@@ -91,8 +116,11 @@ class TradingOrderControllerTest {
 
   @Test
   void testGetAllOrdersInternlError() throws Exception {
-    when(tradingOrderService.getAllOrders()).thenThrow(new RuntimeException("Internal server error"));
-    mockMvc.perform(get("/api/v1/orders"))
+    when(tradingOrderService.getOrders("AAPL", "BUY", "symbol")).thenThrow(new RuntimeException("Internal server error"));
+    mockMvc.perform(get("/api/v1/orders")
+          .param("symbol", "AAPL")
+          .param("side", "BUY")
+          .param("groupBy", "symbol"))
           .andExpect(status().isInternalServerError());
   }
 
@@ -161,4 +189,3 @@ class TradingOrderControllerTest {
 
   }
 }
-
